@@ -1,17 +1,15 @@
 import { useState, type FormEvent } from "react";
-
 import { generatePdf } from "../services/pdf-api";
-
 import type { PdfFormValues } from "../types/pdf";
 
 const initialValues: PdfFormValues = {
-  url: "https://www.rifqii.com/",
-  title: "Rifqi | Software Development",
-  filename: "rifqi-portfolio.pdf",
+  url: "",
+  title: "",
+  filename: "",
   maxPages: 10,
 };
 
-function normalizeUrl(value: string) {
+function normalizeUrl(value: string): string {
   const trimmedValue = value.trim();
 
   if (/^https?:\/\//i.test(trimmedValue)) {
@@ -21,7 +19,7 @@ function normalizeUrl(value: string) {
   return `https://${trimmedValue}`;
 }
 
-function validateValues(values: PdfFormValues) {
+function validateValues(values: PdfFormValues): string {
   if (!values.url.trim()) {
     return "URL website wajib diisi.";
   }
@@ -53,11 +51,8 @@ function validateValues(values: PdfFormValues) {
 
 export default function PdfGeneratorForm() {
   const [values, setValues] = useState<PdfFormValues>(initialValues);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [error, setError] = useState("");
-
   const [success, setSuccess] = useState("");
 
   function updateValue<Key extends keyof PdfFormValues>(
@@ -111,18 +106,9 @@ export default function PdfGeneratorForm() {
       className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-black/30 sm:p-8"
     >
       <div className="mb-7">
-        <span className="inline-flex rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 text-xs font-semibold tracking-wide text-blue-300 uppercase">
-          Screenshot PDF Generator
-        </span>
-
         <h2 className="mt-4 text-2xl font-bold tracking-tight text-white">
           Buat PDF dari tampilan website
         </h2>
-
-        <p className="mt-2 text-sm leading-6 text-slate-400">
-          Website diambil sebagai screenshot viewport 1440 × 900 piksel,
-          kemudian setiap screenshot disusun menjadi halaman PDF.
-        </p>
       </div>
 
       <div className="space-y-5">
@@ -208,27 +194,6 @@ export default function PdfGeneratorForm() {
             />
           </div>
         </div>
-      </div>
-
-      <div className="mt-6 grid gap-3 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-xs text-slate-400 sm:grid-cols-2">
-        <p>
-          Viewport:{" "}
-          <span className="font-semibold text-slate-200">1440 × 900</span>
-        </p>
-
-        <p>
-          Overlap: <span className="font-semibold text-slate-200">100 px</span>
-        </p>
-
-        <p>
-          Tema website:{" "}
-          <span className="font-semibold text-slate-200">Dark</span>
-        </p>
-
-        <p>
-          Metode:{" "}
-          <span className="font-semibold text-slate-200">PNG + pdf-lib</span>
-        </p>
       </div>
 
       <button
