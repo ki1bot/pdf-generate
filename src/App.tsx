@@ -1,14 +1,15 @@
-import PdfGeneratorForm from "./components/PdfGeneratorForm";
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import PdfGeneratorForm from "./components/PdfGeneratorForm";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="relative flex min-h-screen flex-col bg-slate-950 text-slate-100">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.18),_transparent_38%)]" />
 
       <Navbar />
 
-      <main className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-24 sm:px-6 sm:py-16 lg:px-8">
+      <main className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-12 pt-24 sm:px-6 sm:py-16 lg:px-8">
         <header className="mx-auto max-w-3xl text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-500/10 text-blue-300 shadow-xl shadow-blue-950/30">
             <svg
@@ -34,14 +35,12 @@ export default function App() {
           </p>
         </header>
 
-        <section className="mx-auto mt-10 max-w-3xl">
+        <section className="mx-auto mt-10 w-full max-w-3xl">
           <PdfGeneratorForm />
         </section>
-
-        <footer className="mt-10 text-center text-xs text-white">
-          <p>© {new Date().getFullYear()} Kibot. All rights reserved.</p>
-        </footer>
       </main>
+
+      <Footer />
     </div>
   );
 }
