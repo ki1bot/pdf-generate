@@ -17,9 +17,9 @@ blockedNetworks.addSubnet("198.51.100.0", 24, "ipv4");
 blockedNetworks.addSubnet("203.0.113.0", 24, "ipv4");
 blockedNetworks.addSubnet("224.0.0.0", 4, "ipv4");
 blockedNetworks.addSubnet("240.0.0.0", 4, "ipv4");
+
 blockedNetworks.addSubnet("::", 128, "ipv6");
 blockedNetworks.addSubnet("::1", 128, "ipv6");
-blockedNetworks.addSubnet("::ffff:0:0", 96, "ipv6");
 blockedNetworks.addSubnet("fc00::", 7, "ipv6");
 blockedNetworks.addSubnet("fe80::", 10, "ipv6");
 blockedNetworks.addSubnet("ff00::", 8, "ipv6");
@@ -39,7 +39,10 @@ export class UrlValidationError extends Error {
 }
 
 function normalizeHostname(hostname: string) {
-  return hostname.toLowerCase().replace(/\.$/, "");
+  return hostname
+    .toLowerCase()
+    .replace(/\.$/, "")
+    .replace(/^\[(.*)\]$/, "$1");
 }
 
 function isBlockedHostname(hostname: string) {
@@ -93,12 +96,15 @@ async function assertPublicHostname(
       return;
     }
 
-    let addresses;
+    let addresses: Array<{
+      address: string;
+      family: number;
+    }>;
 
     try {
       addresses = await lookup(normalizedHostname, {
         all: true,
-        verbatim: true,
+        order: "verbatim",
       });
     } catch {
       throw new UrlValidationError(
@@ -112,7 +118,11 @@ async function assertPublicHostname(
       );
     }
 
-    if (addresses.some(({ address }) => isBlockedAddress(address))) {
+    const blockedAddress = addresses.find(({ address }) =>
+      isBlockedAddress(address),
+    );
+
+    if (blockedAddress) {
       throw new UrlValidationError(
         "Domain mengarah ke jaringan privat atau khusus.",
       );
@@ -175,7 +185,13 @@ export async function validateResourceUrl(
   rawUrl: string,
   cache: Map<string, Promise<void>>,
 ) {
-  const url = new URL(rawUrl);
+  let url: URL;
+
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new UrlValidationError("Format URL resource tidak valid.");
+  }
 
   if (["data:", "blob:", "about:"].includes(url.protocol)) {
     return;
