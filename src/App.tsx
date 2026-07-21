@@ -1,12 +1,12 @@
 import PdfGeneratorForm from "./components/PdfGeneratorForm";
-import ProfileMenu from "./components/ProfileMenu";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.18),_transparent_38%)]" />
 
-      <ProfileMenu />
+      <Navbar />
 
       <main className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-24 sm:px-6 sm:py-16 lg:px-8">
         <header className="mx-auto max-w-3xl text-center">

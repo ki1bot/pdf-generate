@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function ProfileMenu() {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
